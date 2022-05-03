@@ -1,4 +1,4 @@
-package main
+package api
 
 import (
 	"net/http"
@@ -15,11 +15,11 @@ var categories = []category{
 	{ID: "1", Name: "Bar"},
 }
 
-func getCategories(c *gin.Context) {
+func GetCategories(c *gin.Context) {
 	c.IndentedJSON(http.StatusOK, categories)
 }
 
-func postCategory(c *gin.Context) {
+func PostCategory(c *gin.Context) {
 	var newCategory category
 
 	if err := c.BindJSON(&newCategory); err != nil {
@@ -30,7 +30,7 @@ func postCategory(c *gin.Context) {
 	c.IndentedJSON(http.StatusCreated, newCategory)
 }
 
-func getCategoryByID(c *gin.Context) {
+func GetCategoryByID(c *gin.Context) {
 	id := c.Param("id")
 
 	for _, a := range categories {
@@ -40,18 +40,4 @@ func getCategoryByID(c *gin.Context) {
 		}
 	}
 	c.IndentedJSON(http.StatusNotFound, gin.H{"message": "category not found"})
-}
-
-func main() {
-	router := gin.Default()
-
-	categories := router.Group("/api/category")
-	{
-		categories.GET("", getCategories)
-		categories.POST("", postCategory)
-		categories.GET("/:id", getCategoryByID)
-	}
-
-
-	router.Run("localhost:8080")
 }
