@@ -44,9 +44,14 @@ func getCategoryByID(c *gin.Context) {
 
 func main() {
 	router := gin.Default()
-	router.GET("/api/category", getCategories)
-	router.POST("/api/category", postCategory)
-	router.GET("/api/category/:id", getCategoryByID)
+
+	categories := router.Group("/api/category")
+	{
+		categories.GET("", getCategories)
+		categories.POST("", postCategory)
+		categories.GET("/:id", getCategoryByID)
+	}
+
 
 	router.Run("localhost:8080")
 }
